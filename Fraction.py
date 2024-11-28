@@ -1,6 +1,6 @@
 class DenominatorIsZero(Exception):
     pass
-class NotAFractionError(Exception):
+class WrongTypeError(Exception):
     pass
 
 class Fraction:
@@ -25,7 +25,6 @@ class Fraction:
             raise TypeError("Le numérateur et le dénominateur doivent etre des entiers ")
         if den == 0 :
             raise DenominatorIsZero(f"le dénominateur ne peut pas etre égal à zero ")
-
 
         pgcd = self.pgcd(num,den)
         self.__denominator = den // pgcd
@@ -60,7 +59,10 @@ class Fraction:
         POST :
             - renvoie la chaine "numerator + 1/denominator"
         """
-        return f"{self.numerator//self.denominator} + 1/{self.denominator}"
+        entier = self.numerator // self.denominator
+        reste = self.numerator % self.denominator
+
+        return f"{entier} + {reste}/{self.denominator}"
 
     # ------------------ Operators overloading ------------------
 
@@ -151,12 +153,12 @@ class Fraction:
             - renvoie la fraction à la puissance other
             - sinon soulève une erreur
         """
+
         if not isinstance(other, (int,float)):
             raise TypeError(f"{other} is not a float or integer")
         num = self.numerator ** other
         den = self.denominator ** other
-        return Fraction(num, den)
-
+        return self.convert_to_fraction(num/den)
 
     def __eq__(self, other):
         """Overloading of the == operator for fractions
@@ -173,7 +175,6 @@ class Fraction:
         """
         if isinstance(other, (int, float)):
             other = self.convert_to_fraction(other)
-        self.is_correct(other)
 
         redform_other = self.reduced_form(other)
 
@@ -228,16 +229,16 @@ class Fraction:
         """Check if two fractions differ by a unit fraction.
 
         PRE :
-            - other doit etre de type Fraction
+            - other doit etre de type Fraction, int ou float (qui sera convertit en fraction)
             - other doit avoir un dénominateur != 0
             - other doit avoir un numerator qui est un entier
         POST :
             - Renvoie True si |self - other| = 1/(n) pour un entier n > 0
         """
+
         if isinstance(other, (int, float)):
             other = self.convert_to_fraction(other)
 
-        self.is_correct(other)
         diff = self - other  # Différence entre les deux fractions
         return diff.is_unit()
 
@@ -255,12 +256,8 @@ class Fraction:
 
     @staticmethod
     def is_correct(other):
-        if not isinstance(other, Fraction):
-            raise(NotAFractionError(f"{other} n'est pas de type 'Fraction'"))
-        if not isinstance(other.numerator, int) or not isinstance(other.denominator, int):
-            raise TypeError(f" les parametres de {other} ne sont pas de type 'int'")
-        if other.denominator == 0:
-            raise(DenominatorIsZero(f"Le denominateur de {other} est égal à 0"))
+        if not isinstance(other, (Fraction ,int ,float)):
+            raise(WrongTypeError(f"{other} doit etre de type Fraction, int ou float"))
 
     @staticmethod
     def convert_to_fraction(other):
@@ -272,15 +269,16 @@ class Fraction:
         - renvoie une instance Fraction équivalente à other
         - si other ne peut pas etre convertit en Fraction, soulève une erreur
         """
-
+        numerator = other
+        denominator = 1
         if isinstance(other, int):
-            return Fraction(other, 1)
+            pass
         elif isinstance(other, float):
             # Convert float to fraction
             decimal_places = len(str(other).split(".")[1])  # Nombre de chiffres après la virgule
             denominator = 10 ** decimal_places
             numerator = int(other * denominator)
-            return Fraction(numerator, denominator)
-        raise TypeError(f"Cannot convert {other} to Fraction")
+        else:
+            raise TypeError(f"Cannot convert {other} to Fraction")
 
-
+        return Fraction(numerator, denominator)
