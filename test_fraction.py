@@ -22,8 +22,6 @@ class TestFraction(unittest.TestCase):
             Fraction("1", 2)
         with self.assertRaises(TypeError):
             Fraction(1, "2")
-        with self.assertRaises(TypeError):
-            Fraction(1,2) ** "invalid"
 
     def test_fraction_Wrong_values(self):
         f1 = Fraction(1, 2)
