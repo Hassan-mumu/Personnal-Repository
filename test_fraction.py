@@ -1,13 +1,12 @@
 import unittest
+
 from Fraction import Fraction, DenominatorIsZero, WrongTypeError
 
 
 class TestFraction(unittest.TestCase):
     """Unit tests for the Fraction class."""
 
-
     """Test the creation of a valid Fraction."""
-
 
     def test_reduction_case(self):
         """Test the case where the fraction is reduced."""
@@ -56,7 +55,6 @@ class TestFraction(unittest.TestCase):
         f = Fraction(123456789, 987654321)
         self.assertEqual(f.numerator, 13717421)
         self.assertEqual(f.denominator, 109739369)
-
 
     """Test invalid fraction creation scenarios."""
 
@@ -108,8 +106,8 @@ class TestFraction(unittest.TestCase):
 
     def test_str_both_negative(self):
         """Test the string representation of a negative fraction (both negative numerator and denominator)."""
-        fative = Fraction(-3, -4)
-        self.assertEqual(str(fative), "3/4")
+        f = Fraction(-3, -4)
+        self.assertEqual(str(f), "3/4")
 
     def test_str_unit_numerator(self):
         """Test the string representation of a fraction where the numerator is 1 (unit fraction)."""
@@ -253,9 +251,7 @@ class TestFraction(unittest.TestCase):
         with self.assertRaises(WrongTypeError):
             result = f + "invalid"  # Invalid type for addition
 
-
     """Test subtraction of fractions and other numeric types."""
-
 
     def test_subtraction_of_two_simple_fractions(self):
         """Test subtraction of two simple fractions."""
@@ -581,7 +577,6 @@ class TestFraction(unittest.TestCase):
         self.assertEqual(result2.numerator, 1)
         self.assertEqual(result2.denominator, 4)
 
-
     def test_power_with_improper_fraction(self):
         """Test power of an improper fraction."""
         f = Fraction(5, 2)
@@ -597,7 +592,6 @@ class TestFraction(unittest.TestCase):
         result = f ** val
         self.assertEqual(result.numerator, 2)
         self.assertEqual(result.denominator, 5)
-
 
     # Tests des comparaisons et des vérifications
 
@@ -662,7 +656,7 @@ class TestFraction(unittest.TestCase):
         f = Fraction(2, 4)  # Equivalent to 1/2
         val = "not a fraction"  # Invalid type
         with self.assertRaises(WrongTypeError):
-           result = f == val
+            result = f == val
 
     def test_fraction_equality_reflexive_and_identical(self):
         """Test reflexive equality and equality between identical fractions."""
@@ -783,7 +777,6 @@ class TestFraction(unittest.TestCase):
         f = Fraction(0, 5)
         self.assertTrue(f.is_integer())  # 0/5 is an integer, 0
 
-
     """Test if a fraction is proper."""
 
     def test_proper_fraction_with_positive_numerator(self):
@@ -877,7 +870,6 @@ class TestFraction(unittest.TestCase):
         """Test if the fraction is a unit fraction with a large negative numerator (-1/500)."""
         f = Fraction(-1, 500)
         self.assertTrue(f.is_unit())  # -1/500 is a unit fraction
-
 
     """Test if two fractions are adjacent."""
 

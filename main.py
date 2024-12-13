@@ -1,5 +1,6 @@
 from Fraction import *
 
+
 def demo_fraction():
     print("Démonstration de la classe Fraction")
     print("-----------------------------------")
@@ -87,6 +88,7 @@ def demo_fraction():
         print(f"Erreur attrapée : {e}")
 
     print("\nDémonstration terminée.")
+
 
 if __name__ == "__main__":
     demo_fraction()

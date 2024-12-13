@@ -1,7 +1,12 @@
 class DenominatorIsZero(Exception):
+    """Exception raised when the denominator is zero."""
     pass
+
+
 class WrongTypeError(Exception):
+    """Exception raised when the input type is incorrect."""
     pass
+
 
 class Fraction:
     """Class representing a fraction and operations on it
@@ -15,19 +20,18 @@ class Fraction:
         """This builds a fraction based on some numerator and denominator.
 
         PRE :
-            - num prend un entier et den prend un entier != de 0
         POST :
             - créer une fraction "numerateur"/"denominateur" sous sa forme réduite
         RAISE :
-            - TypError si le type des parametres est diffèrent d'un entier
+            - TypError si le type des parametres est différent d'un entier
             - DenominatorIsZero si le denominateur est 0
         """
-        if not isinstance(num,int) or not isinstance(den,int):
-            raise TypeError("Le numérateur et le dénominateur doivent etre des entiers ")
-        if den == 0 :
-            raise DenominatorIsZero("le dénominateur ne peut pas etre égal à zero ")
+        if not isinstance(num, int) or not isinstance(den, int):
+            raise TypeError("Le numérateur et le dénominateur doivent être des entiers ")
+        if den == 0:
+            raise DenominatorIsZero("le dénominateur ne peut pas être égal à zero ")
 
-        pgcd = self.pgcd(num,den)
+        pgcd = self.pgcd(num, den)
         self.__denominator = den // pgcd
         self.__numerator = num // pgcd
 
@@ -50,7 +54,6 @@ class Fraction:
         """
         return f"{self.numerator}" if self.is_integer() else f"{self.numerator}/{self.denominator}"
 
-
     def as_mixed_number(self):
         """Return a textual representation of the reduced form of the fraction as a mixed number
 
@@ -72,11 +75,10 @@ class Fraction:
         """Overloading of the + operator for fractions
 
          PRE :
-            - other peut etre de type Fraction, int ou float. Si other est de type int ou float, elle sera convertit en Fraction
          POST :
             - renvoie la somme de la fraction de type Fraction
          RAISE:
-            - WrongTypeError si other est differents de int, float ou une Fraction
+            - WrongTypeError si other est différent de int, float ou une Fraction
          """
 
         self.is_correct(other)
@@ -91,11 +93,10 @@ class Fraction:
         """Overloading of the - operator for fractions
 
          PRE :
-            - other doit etre de type Fraction, int ou float
          POST :
             - renvoie la différence de la fraction de type Fraction
          RAISE:
-            - WrongTypeError si other est differents de int, float ou une Fraction
+            - WrongTypeError si other est différent de int, float ou une Fraction
          """
 
         self.is_correct(other)
@@ -111,11 +112,10 @@ class Fraction:
         """Overloading of the * operator for fractions
 
          PRE :
-            - other doit etre de type Fraction, int ou float
          POST :
             - renvoie la multiplication de la fraction de type Fraction
          RAISE:
-            - WrongTypeError si other est differents de int, float ou une Fraction
+            - WrongTypeError si other est différent de int, float ou une Fraction
          """
 
         self.is_correct(other)
@@ -130,11 +130,11 @@ class Fraction:
     def __truediv__(self, other):
         """Overloading of the / operator for fractions
         PRE :
-            - other peut etre de type Fraction, int ou float. Si other est de type int ou float, elle sera convertit en fraction
          POST :
             - renvoie la division entière de la fraction de type Fraction
         RAISE:
-            - WrongTypeError si other est different de int, float ou une Fraction
+            - WrongTypeError si other est différent de int, float ou une Fraction
+            - DivisionZeroError si other.numérateur est égal à  zero
          """
 
         self.is_correct(other)
@@ -146,35 +146,33 @@ class Fraction:
 
         """Overloading of the ** operator for fractions
 
-        PRE :
-            - other doit etre de type int ou float
+        PRE : -
         POST :
             - renvoie la fraction à la puissance other
         RAISES :
             - TypeError si other est différent de int ou float
         """
 
-        if not isinstance(other, (int,float)):
+        if not isinstance(other, (int, float)):
             raise TypeError(f"{other} is not a float or integer")
         num = self.numerator ** other
         den = self.denominator ** other
-        return self.convert_to_fraction(num/den)
+        return self.convert_to_fraction(num / den)
 
     def __eq__(self, other):
         """Overloading of the == operator for fractions
         PRE :
-            - other peut etre de type Fraction, int ou float. Si other est de type int ou float, elle sera convertit en Fraction
         POST :
             - Renvoie un booleen True si les numérateur et le denominateur des
                 fractions sous leur formes réduites sont égaux et False sinon
         RAISES :
-            - WrongTypeError si other est differents de int, float ou une Fraction
+            - WrongTypeError si other est différent de int, float ou une Fraction
         """
         self.is_correct(other)
         if isinstance(other, (int, float)):
             other = self.convert_to_fraction(other)
-        return  (self.numerator == other.numerator and
-                 self.denominator == other.denominator)
+        return (self.numerator == other.numerator and
+                self.denominator == other.denominator)
 
     def __float__(self):
         """Returns the decimal value of the fraction
@@ -183,8 +181,6 @@ class Fraction:
         POST : renvoie la division du numerator sur le dénominateur sous forme d'un float
         """
         return self.numerator / self.denominator
-
-    # TODO : [BONUS] You can overload other operators if you wish (ex : <, >, ...)
 
     # ------------------ Properties checking  ------------------
 
@@ -224,18 +220,18 @@ class Fraction:
         """Check if two fractions differ by a unit fraction.
 
         PRE :
-            - other peut-etre de type Fraction, int ou float (qui sera convertit en fraction)
         POST :
             - Renvoie True si |self - other| = 1/(n) pour un entier n > 0
         """
 
+        self.is_correct(other)
         if isinstance(other, (int, float)):
             other = self.convert_to_fraction(other)
 
         diff = self - other  # Différence entre les deux fractions
         return diff.is_unit()
 
-#------------------------------------------------------Ajouts personnel pour me simplifier la tache------------------------------------------------------------------
+    # ------------------------------------------------------Ajouts personnel pour me simplifier la tache------------------------------------------------------------------
 
     @staticmethod
     def pgcd(a, b):
@@ -245,22 +241,21 @@ class Fraction:
 
     @staticmethod
     def is_correct(other):
-        if not isinstance(other, (Fraction ,int ,float)):
-            raise(WrongTypeError(f"{other} n'est pas de type Fraction mais de type {type(other)}"))
+        if not isinstance(other, (Fraction, int, float)):
+            raise WrongTypeError(
+                f"{other} n'est pas de type Fraction mais de type {type(other)}")  # Suppression des parenthèses inutiles
 
     @staticmethod
     def convert_to_fraction(other):
         """Converti un integer ou un float en une Fraction.
-
         PRE :
-        - other est un int ou un float
         POST :
         - renvoie une instance Fraction équivalente à other
         - si other ne peut pas etre convertit en Fraction, soulève une erreur
         """
         numerator = other
         denominator = 1
-        if isinstance(other, int) and not isinstance(other , bool):
+        if isinstance(other, int) and not isinstance(other, bool):
             pass
         elif isinstance(other, float):
             # Convert float to fraction
@@ -271,3 +266,5 @@ class Fraction:
             raise TypeError(f"Cannot convert {type(other)} to Fraction")
 
         return Fraction(numerator, denominator)
+
+    # Ajout d'une ligne vide à la fin du fichier

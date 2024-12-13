@@ -1,0 +1,27 @@
+[MESSAGES CONTROL]
+# Désactivation des messages spécifiques
+disable=
+    C0114,  # Missing module docstring
+    C0116,  # Missing function or method docstring
+    C0301,  # Line too long
+    W0107,  # Unnecessary pass
+    R0201,  # Method could be a function
+    C0103,  # Invalid variable name
+
+[FORMAT]
+# Longueur maximale des lignes
+max-line-length=120
+
+[DESIGN]
+# Complexité maximale
+max-branches=12
+max-statements=50
+max-attributes=7
+
+[BASIC]
+# Conventions de nommage des arguments, variables, etc.
+good-names=i,j,k,_,x,y,z  # Autorise des noms courts pour des variables simples
+
+[TYPECHECK]
+# Permet les annotations typées
+ignore-mixin-members=yes
